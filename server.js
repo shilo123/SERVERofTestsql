@@ -63,7 +63,6 @@ app.get("/Getnetunim", async (req, res) => {
   GROUP BY Department.DepartmentName ORDER BY Department.DepartmentName
   `;
   let result = await SQL(q);
-  // console.log(result);
   res.json(result);
 });
 app.get("/GetD", async (req, res) => {

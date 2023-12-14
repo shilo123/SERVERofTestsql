@@ -44,15 +44,19 @@ async function nisuySQL(query) {
   }
 }
 
-const q = `SELECT * FROM ovdim`;
-nisuySQL(q);
+// const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM
+// ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
+// `;
+// nisuySQL(q);
 
 app.get("/", async (req, res) => {
   try {
-    const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM 
-    ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
-    `;
+    // const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM
+    // ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
+    // `;
+    const q = `SELECT * FROM ovdim`;
     const result = await SQL(q);
+    console.log({ resqo: result });
     res.json(result);
   } catch (error) {
     res.json("ERROR");

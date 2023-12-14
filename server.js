@@ -90,11 +90,15 @@ nisuySQL(q);
 // const q = `SELECT * FROM ovdim`;
 // nisuySQL(q);
 app.get("/", async (req, res) => {
-  const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM 
-  ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
-  `;
-  const result = await SQL(q);
-  res.json(result);
+  try {
+    const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM 
+    ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
+    `;
+    const result = await SQL(q);
+    res.json(result);
+  } catch (error) {
+    res.json("ERROR");
+  }
 });
 app.get("/Getnetunim", async (req, res) => {
   const q = `SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName FROM 

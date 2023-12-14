@@ -49,8 +49,6 @@ async function nisuySQL(query) {
   const res = await SQL(query);
   console.log(res);
 }
-// let q = `SELECT * FROM ovdim`;
-// nisuySQL(q);
 
 app.get("/", async (req, res) => {
   const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM 

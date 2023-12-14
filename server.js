@@ -9,8 +9,8 @@ const fs = require("fs");
 const axios = require("axios");
 app.use(bodyParser.json());
 app.use(cors());
-const sql = require("./mssql/msnodesqlv8");
-
+const sql = require("mssql/msnodesqlv8");
+// console.log(sql);
 // server: "MC58148\\SQLEXPRESS",
 const config = {
   server: "34.41.107.10",
@@ -45,12 +45,12 @@ function SQL(query) {
     });
   });
 }
-// async function nisuySQL(query) {
-//   const res = await SQL(query);
-//   console.log(res);
-// }
-// const q = `SELECT * FROM ovdim`;
-// nisuySQL(q);
+async function nisuySQL(query) {
+  const res = await SQL(query);
+  console.log(res);
+}
+const q = `SELECT * FROM ovdim`;
+nisuySQL(q);
 app.get("/", async (req, res) => {
   const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM 
   ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName

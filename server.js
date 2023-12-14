@@ -9,55 +9,54 @@ const fs = require("fs");
 const axios = require("axios");
 app.use(bodyParser.json());
 app.use(cors());
-// const sql = require("mssql");
+const sql = require("mssql");
 
-// const config = {
-//   user: "sqlserver",
-//   password: "Shilo#123",
-//   server: "34.41.107.10",
-//   database: "newDB",
-//   options: {
-//     encrypt: true, // עבור Azure SQL. שנה ל- false אם אינך משתמש ב-Azure
-//     trustServerCertificate: true, // רק לצורך פיתוח. הסר לפני הפקה
-//   },
-// };
+const config = {
+  user: "sqlserver",
+  password: "Shilo#123",
+  server: "34.41.107.10",
+  database: "newDB",
+  options: {
+    encrypt: true, // עבור Azure SQL. שנה ל- false אם אינך משתמש ב-Azure
+    trustServerCertificate: true, // רק לצורך פיתוח. הסר לפני הפקה
+  },
+};
 
-// async function SQL(query) {
-//   try {
-//     await sql.connect(config);
-//     const result = await sql.query(query);
-//     return result.recordset;
-//   } catch (err) {
-//     console.error("SQL error:", err);
-//     throw err;
-//   } finally {
-//     await sql.close();
-//   }
-// }
+async function SQL(query) {
+  try {
+    await sql.connect(config);
+    const result = await sql.query(query);
+    return result.recordset;
+  } catch (err) {
+    console.error("SQL error:", err);
+    throw err;
+  } finally {
+    await sql.close();
+  }
+}
 
-// async function nisuySQL(query) {
-//   try {
-//     const res = await SQL(query);
-//     console.log(res);
-//   } catch (err) {
-//     console.error("Error running query:", err);
-//   }
-// }
+async function nisuySQL(query) {
+  try {
+    const res = await SQL(query);
+    console.log(res);
+  } catch (err) {
+    console.error("Error running query:", err);
+  }
+}
 
-// const q = `SELECT * FROM ovdim`;
-// nisuySQL(q);
+const q = `SELECT * FROM ovdim`;
+nisuySQL(q);
 
 app.get("/", async (req, res) => {
-  res.json({ hoy: "hey" });
-  // try {
-  //   const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM
-  //   ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
-  //   `;
-  //   const result = await SQL(q);
-  //   res.json(result);
-  // } catch (error) {
-  //   res.json("ERROR");
-  // }
+  try {
+    const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM 
+    ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
+    `;
+    const result = await SQL(q);
+    res.json(result);
+  } catch (error) {
+    res.json("ERROR");
+  }
 });
 app.get("/Getnetunim", async (req, res) => {
   const q = `SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName FROM 

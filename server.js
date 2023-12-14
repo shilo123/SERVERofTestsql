@@ -11,8 +11,8 @@ app.use(bodyParser.json());
 app.use(cors());
 const sql = require("mssql/msnodesqlv8");
 
+// server: "MC58148\\SQLEXPRESS",
 const config = {
-  // server: "MC58148\\SQLEXPRESS",
   server: "34.41.107.10",
   database: "newDB",
   driver: "msnodesqlv8",

@@ -17,8 +17,7 @@ const config = {
   server: "34.41.107.10",
   database: "newDB",
   options: {
-    encrypt: true, // עבור Azure SQL. שנה ל- false אם אינך משתמש ב-Azure
-    trustServerCertificate: true, // רק לצורך פיתוח. הסר לפני הפקה
+    trustServerCertificate: true,
   },
 };
 
@@ -51,10 +50,9 @@ async function nisuySQL(query) {
 
 app.get("/", async (req, res) => {
   try {
-    // const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM
-    // ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
-    // `;
-    const q = `SELECT * FROM ovdim`;
+    const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM
+    ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
+    `;
     const result = await SQL(q);
     console.log({ resqo: result });
     res.json(result);

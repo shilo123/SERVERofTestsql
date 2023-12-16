@@ -43,9 +43,22 @@ async function nisuySQL(query) {
   }
 }
 
-// const q = `SELECT ovdim.EmployeeID ,ovdim.Name,ovdim.Position,Department.DepartmentName  FROM
-// ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
+// var q = `
+// SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName, Managers.Name AS ManagerName
+// FROM ovdim
+// JOIN Department ON ovdim.DepartmentID = Department.DepartmentID
+// LEFT JOIN ovdim AS Managers ON Department.ManagerID = Managers.EmployeeID
+// GROUP BY Department.DepartmentName, Managers.Name
+// ORDER BY Department.DepartmentName;
 // `;
+
+// let q = `SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName, Managers.Name AS ManagerName
+// FROM ovdim
+// JOIN Department  ON ovdim.DepartmentID = Department.DepartmentID
+// LEFT JOIN ovdim AS Managers ON Department.ManagerID = Managers.EmployeeID
+// GROUP BY Department.DepartmentName,Managers.Name  ORDER BY TOTAL DESC
+// `;
+
 // nisuySQL(q);
 
 app.get("/", async (req, res) => {
@@ -54,18 +67,21 @@ app.get("/", async (req, res) => {
     ovdim JOIN Department ON ovdim.DepartmentID = Department.DepartmentID ORDER BY Department.DepartmentName
     `;
     const result = await SQL(q);
-    console.log({ resqo: result });
     res.json(result);
   } catch (error) {
     res.json("ERROR");
   }
 });
 app.get("/Getnetunim", async (req, res) => {
-  const q = `SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName FROM 
-  ovdim JOIN Department  ON ovdim.DepartmentID = Department.DepartmentID 
-  GROUP BY Department.DepartmentName ORDER BY Department.DepartmentName
+  let q = `SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName, Managers.Name AS Manger
+  FROM ovdim 
+  JOIN Department  ON ovdim.DepartmentID = Department.DepartmentID 
+  LEFT JOIN ovdim AS Managers ON Department.ManagerID = Managers.EmployeeID
+  GROUP BY Department.DepartmentName,Managers.Name  ORDER BY TOTAL DESC
   `;
+
   let result = await SQL(q);
+  console.log(result);
   res.json(result);
 });
 app.get("/GetD", async (req, res) => {

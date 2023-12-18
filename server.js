@@ -73,11 +73,11 @@ app.get("/", async (req, res) => {
   }
 });
 app.get("/Getnetunim", async (req, res) => {
-  let q = `SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName, Managers.Name AS Manger
+  let q = `SELECT COUNT(ovdim.Name) AS TOTAL,Department.DepartmentName, Managers.Name AS Manger ,Managers.EmployeeID AS ID
   FROM ovdim 
   JOIN Department  ON ovdim.DepartmentID = Department.DepartmentID 
   LEFT JOIN ovdim AS Managers ON Department.ManagerID = Managers.EmployeeID
-  GROUP BY Department.DepartmentName,Managers.Name  ORDER BY TOTAL DESC
+  GROUP BY Department.DepartmentName,Managers.Name,Managers.EmployeeID  ORDER BY TOTAL DESC
   `;
 
   let result = await SQL(q);
@@ -93,15 +93,15 @@ app.get("/GetD", async (req, res) => {
   res.json(result);
 });
 app.post("/AddOved", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const q = `SELECT * FROM Department WHERE DepartmentName = '${req.body.Department}'`;
     let D_id = await SQL(q);
     D_id = D_id[0].DepartmentID;
-    console.log(D_id);
+    // console.log(D_id);
     const query = `INSERT INTO ovdim (Name,DepartmentID,Position) VALUES ('${req.body.shem}',${D_id},'${req.body.position}')`;
     let result = await SQL(query);
-    console.log(result);
+    // console.log(result);
     res.json(true);
   } catch (error) {
     console.log(error);
@@ -119,14 +119,41 @@ app.delete("/deleteUser/:id", async (req, res) => {
   }
 });
 app.post("/AddDepartment", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const q = `SELECT MAX(DepartmentID) AS id FROM Department`;
     let id = await SQL(q);
     id = id[0].id + 1;
-    console.log(id);
+    // console.log(id);
     const query = `INSERT INTO Department (DepartmentID,DepartmentName) VALUES (${id},'${req.body.newP}')`;
     await SQL(query);
+    res.json(true);
+  } catch (error) {
+    res.json(false);
+  }
+});
+app.put("/UPovedos", async (req, res) => {
+  // console.log(req.body);
+  try {
+    const query = `SELECT DepartmentID FROM Department WHERE DepartmentName = '${req.body.Department}'`;
+    let id = await SQL(query);
+    id = id[0].DepartmentID;
+    // console.log(id);
+
+    const q = `UPDATE ovdim
+    SET Name  = '${req.body.shem}',DepartmentID = ${id},Position = '${req.body.position}'
+    WHERE EmployeeID = ${req.body.ID};
+    `;
+    await SQL(q);
+    res.json(true);
+  } catch (error) {
+    res.json(false);
+  }
+});
+app.post("/NewManager", async (req, res) => {
+  try {
+    console.log(req.body);
+    // const query = `SELECT Name FROM ovdim WHERE Name =`;
     res.json(true);
   } catch (error) {
     res.json(false);
